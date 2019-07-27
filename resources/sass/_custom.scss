@@ -1,0 +1,19 @@
+// Card
+.card {
+  box-shadow: $box-shadow;
+}
+
+// Checkbox
+.form-check {
+  height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.form-check-input {
+  margin-top: 0;
+}
+
+.form-check-label {
+  margin-left: 10px;
+}
