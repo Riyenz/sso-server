@@ -13,7 +13,6 @@
               <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Guard</th>
                 <th>Date Created</th>
               </tr>
             </thead>
@@ -22,12 +21,11 @@
               <tr v-for="role in roles" :key="role.id">
                 <td>{{ role.id }}</td>
                 <td>{{ role.name }}</td>
-                <td>{{ role.guard_name }}</td>
                 <td>{{ role.created_at | date }}</td>
                 <td>
-                  <button class="btn btn-link text-primary">Edit</button>
+                  <button class="btn btn-link text-primary" @click="showEditModal(role)">Edit</button>
                 </td>
-                <td style="vertical-align: middle;">
+                <td>
                   <button class="btn btn-link text-danger" @click="deleteRole(role.id)">Delete</button>
                 </td>
               </tr>
@@ -70,6 +68,40 @@
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="modal-edit-role" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Role</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form role="form" >
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label">Role</label>
+                <div class="col-md-9">
+                  <input
+                    id="edit-role-name"
+                    type="text"
+                    class="form-control"
+                    placeholder="Role Name"
+                    @keyup.enter="submitEdit"
+                    v-model="selectedRole.name"
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" @click="submitEdit">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -79,10 +111,12 @@
 
   export default {
     mounted() {
+      this.prepareComponent();
     },
     data() {
       return {
         roleName: '',
+        selectedRole: {},
       };
     },
     computed: {
@@ -96,7 +130,8 @@
       ...mapActions([
         'requestRoles',
         'createRole',
-        'deleteRole'
+        'deleteRole',
+        'editRole',
       ]),
       showCreateModal() {
         $("#modal-create-role").modal("show");
@@ -105,6 +140,14 @@
         $("#modal-create-role").modal("hide");
         this.createRole(this.roleName);
         this.roleName = '';
+      },
+      showEditModal(role) {
+        this.selectedRole = role;
+        $("#modal-edit-role").modal("show");
+      },
+      submitEdit() {
+        $("#modal-edit-role").modal("hide");
+        this.editRole(this.selectedRole);
       },
       prepareComponent() {
         this.requestRoles();

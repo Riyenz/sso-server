@@ -1815,17 +1815,52 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    this.prepareComponent();
+  },
   data: function data() {
     return {
-      roleName: ''
+      roleName: '',
+      selectedRole: {}
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['roles', 'isLoading', 'isLoaded'])),
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['requestRoles', 'createRole', 'deleteRole']), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['requestRoles', 'createRole', 'deleteRole', 'editRole']), {
     showCreateModal: function showCreateModal() {
       $("#modal-create-role").modal("show");
     },
@@ -1833,6 +1868,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       $("#modal-create-role").modal("hide");
       this.createRole(this.roleName);
       this.roleName = '';
+    },
+    showEditModal: function showEditModal(role) {
+      this.selectedRole = role;
+      $("#modal-edit-role").modal("show");
+    },
+    submitEdit: function submitEdit() {
+      $("#modal-edit-role").modal("hide");
+      this.editRole(this.selectedRole);
     },
     prepareComponent: function prepareComponent() {
       this.requestRoles();
@@ -57095,32 +57138,39 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(role.name))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(role.guard_name))]),
-                      _vm._v(" "),
                       _c("td", [
                         _vm._v(_vm._s(_vm._f("date")(role.created_at)))
                       ]),
                       _vm._v(" "),
-                      _vm._m(1, true),
-                      _vm._v(" "),
-                      _c(
-                        "td",
-                        { staticStyle: { "vertical-align": "middle" } },
-                        [
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-link text-danger",
-                              on: {
-                                click: function($event) {
-                                  return _vm.deleteRole(role.id)
-                                }
+                      _c("td", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-link text-primary",
+                            on: {
+                              click: function($event) {
+                                return _vm.showEditModal(role)
                               }
-                            },
-                            [_vm._v("Delete")]
-                          )
-                        ]
-                      )
+                            }
+                          },
+                          [_vm._v("Edit")]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-link text-danger",
+                            on: {
+                              click: function($event) {
+                                return _vm.deleteRole(role.id)
+                              }
+                            }
+                          },
+                          [_vm._v("Delete")]
+                        )
+                      ])
                     ])
                   }),
                   0
@@ -57140,7 +57190,7 @@ var render = function() {
       [
         _c("div", { staticClass: "modal-dialog" }, [
           _c("div", { staticClass: "modal-content" }, [
-            _vm._m(2),
+            _vm._m(1),
             _vm._v(" "),
             _c("div", { staticClass: "modal-body" }, [
               _c("form", { attrs: { role: "form" } }, [
@@ -57218,6 +57268,99 @@ var render = function() {
           ])
         ])
       ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: { id: "modal-edit-role", tabindex: "-1", role: "dialog" }
+      },
+      [
+        _c("div", { staticClass: "modal-dialog" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c("form", { attrs: { role: "form" } }, [
+                _c("div", { staticClass: "form-group row" }, [
+                  _c("label", { staticClass: "col-md-3 col-form-label" }, [
+                    _vm._v("Role")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-9" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.selectedRole.name,
+                          expression: "selectedRole.name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "edit-role-name",
+                        type: "text",
+                        placeholder: "Role Name"
+                      },
+                      domProps: { value: _vm.selectedRole.name },
+                      on: {
+                        keyup: function($event) {
+                          if (
+                            !$event.type.indexOf("key") &&
+                            _vm._k(
+                              $event.keyCode,
+                              "enter",
+                              13,
+                              $event.key,
+                              "Enter"
+                            )
+                          ) {
+                            return null
+                          }
+                          return _vm.submitEdit($event)
+                        },
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.selectedRole,
+                            "name",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-secondary",
+                  attrs: { type: "button", "data-dismiss": "modal" }
+                },
+                [_vm._v("Close")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  attrs: { type: "button" },
+                  on: { click: _vm.submitEdit }
+                },
+                [_vm._v("Submit")]
+              )
+            ])
+          ])
+        ])
+      ]
     )
   ])
 }
@@ -57232,19 +57375,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Name")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Guard")]),
-        _vm._v(" "),
         _c("th", [_vm._v("Date Created")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("button", { staticClass: "btn btn-link text-primary" }, [
-        _vm._v("Edit")
       ])
     ])
   },
@@ -57254,6 +57385,27 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
       _c("h5", { staticClass: "modal-title" }, [_vm._v("Create Role")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Edit Role")]),
       _vm._v(" "),
       _c(
         "button",
@@ -75057,23 +75209,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return createRole;
     }(),
-    deleteRole: function () {
-      var _deleteRole = _asyncToGenerator(
+    editRole: function () {
+      var _editRole = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(_ref3, payload) {
-        var getters, commit;
+        var getters, commit, request;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
                 getters = _ref3.getters, commit = _ref3.commit;
-                commit('setRoles', getters.roles.filter(function (role) {
-                  return role.id !== payload;
-                }));
-                _context3.next = 4;
-                return _config__WEBPACK_IMPORTED_MODULE_1__["ssoHttp"]["delete"]("roles/".concat(payload));
+                _context3.next = 3;
+                return _config__WEBPACK_IMPORTED_MODULE_1__["ssoHttp"].patch("roles/".concat(payload.id), payload);
 
-              case 4:
+              case 3:
+                request = _context3.sent;
+                commit('setRoles', getters.roles.map(function (role) {
+                  if (role.id !== payload.id) return role;
+                  return request.data;
+                }));
+
+              case 5:
               case "end":
                 return _context3.stop();
             }
@@ -75081,7 +75237,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }));
 
-      function deleteRole(_x4, _x5) {
+      function editRole(_x4, _x5) {
+        return _editRole.apply(this, arguments);
+      }
+
+      return editRole;
+    }(),
+    deleteRole: function () {
+      var _deleteRole = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(_ref4, payload) {
+        var getters, commit;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                getters = _ref4.getters, commit = _ref4.commit;
+                commit('setRoles', getters.roles.filter(function (role) {
+                  return role.id !== payload;
+                }));
+                _context4.next = 4;
+                return _config__WEBPACK_IMPORTED_MODULE_1__["ssoHttp"]["delete"]("roles/".concat(payload));
+
+              case 4:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }));
+
+      function deleteRole(_x6, _x7) {
         return _deleteRole.apply(this, arguments);
       }
 

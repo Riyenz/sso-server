@@ -26,6 +26,14 @@ export default {
 
       commit('setRoles', [...getters.roles, request.data]);
     },
+    async editRole({ getters, commit }, payload) {
+      const request = await ssoHttp.patch(`roles/${payload.id}`, payload);
+
+      commit('setRoles', getters.roles.map(role => {
+        if (role.id !== payload.id) return role;
+        return request.data;
+      }));
+    },
     async deleteRole({ getters, commit }, payload) {
       commit('setRoles', getters.roles.filter(role => role.id !== payload));
 
