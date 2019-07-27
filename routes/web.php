@@ -18,3 +18,19 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['prefix' => 'roles',  'middleware' => 'auth:web'], function() {
+    Route::get('', 'RolesController@getAll');
+    Route::post('', 'RolesController@create');
+    Route::get('/{id}', 'RolesController@getById');
+    Route::patch('/{id}', 'RolesController@update');
+    Route::delete('/{id}', 'RolesController@delete');
+});
+
+Route::group(['prefix' => 'permissions',  'middleware' => 'auth:web'], function() {
+    Route::get('', 'PermissionsController@getAll');
+    Route::post('', 'PermissionsController@create');
+    Route::get('/{id}', 'PermissionsController@getById');
+    Route::patch('/{id}', 'PermissionsController@update');
+    Route::delete('/{id}', 'PermissionsController@delete');
+});

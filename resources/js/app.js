@@ -10,6 +10,8 @@ window.Vue = require('vue');
 
 import VueRouter from 'vue-router';
 import Routes from './routes';
+import { store } from './store';
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -26,4 +28,5 @@ const router = new VueRouter({
 
 const app = new Vue({
   router,
+  store,
 }).$mount('#app')
