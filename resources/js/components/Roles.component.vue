@@ -19,7 +19,7 @@
             </thead>
 
             <tbody>
-              <tr v-for="(role, index) in roles" :key="index">
+              <tr v-for="role in roles" :key="role.id">
                 <td>{{ role.id }}</td>
                 <td>{{ role.name }}</td>
                 <td>{{ role.guard_name }}</td>
@@ -28,7 +28,7 @@
                   <button class="btn btn-link text-primary">Edit</button>
                 </td>
                 <td style="vertical-align: middle;">
-                  <button class="btn btn-link text-danger">Delete</button>
+                  <button class="btn btn-link text-danger" @click="deleteRole(role.id)">Delete</button>
                 </td>
               </tr>
             </tbody>
@@ -38,7 +38,7 @@
     </div>
 
     <div class="modal fade" id="modal-create-role" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Create Role</h5>
@@ -47,11 +47,25 @@
             </button>
           </div>
           <div class="modal-body">
-            <p>Modal body text goes here.</p>
+            <form role="form" >
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label">Role</label>
+                <div class="col-md-9">
+                  <input
+                    id="create-role-name"
+                    type="text"
+                    class="form-control"
+                    placeholder="Role Name"
+                    @keyup.enter="submitCreate"
+                    v-model="roleName"
+                  />
+                </div>
+              </div>
+            </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Create</button>
+            <button type="button" class="btn btn-primary" @click="submitCreate">Create</button>
           </div>
         </div>
       </div>
@@ -64,8 +78,12 @@
   import * as moment from 'moment';
 
   export default {
-    created() {
-      this.requestRoles();
+    mounted() {
+    },
+    data() {
+      return {
+        roleName: '',
+      };
     },
     computed: {
       ...mapGetters([
@@ -75,9 +93,25 @@
       ])
     },
     methods: {
-      ...mapActions(['requestRoles']),
+      ...mapActions([
+        'requestRoles',
+        'createRole',
+        'deleteRole'
+      ]),
       showCreateModal() {
         $("#modal-create-role").modal("show");
+      },
+      submitCreate() {
+        $("#modal-create-role").modal("hide");
+        this.createRole(this.roleName);
+        this.roleName = '';
+      },
+      prepareComponent() {
+        this.requestRoles();
+
+        $("#modal-create-role").on("shown.bs.modal", () => {
+          $("#create-role-name").focus();
+        });
       }
     },
     filters: {

@@ -1801,16 +1801,44 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  created: function created() {
-    this.requestRoles();
+  mounted: function mounted() {},
+  data: function data() {
+    return {
+      roleName: ''
+    };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['roles', 'isLoading', 'isLoaded'])),
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['requestRoles']), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['requestRoles', 'createRole', 'deleteRole']), {
     showCreateModal: function showCreateModal() {
       $("#modal-create-role").modal("show");
+    },
+    submitCreate: function submitCreate() {
+      $("#modal-create-role").modal("hide");
+      this.createRole(this.roleName);
+      this.roleName = '';
+    },
+    prepareComponent: function prepareComponent() {
+      this.requestRoles();
+      $("#modal-create-role").on("shown.bs.modal", function () {
+        $("#create-role-name").focus();
+      });
     }
   }),
   filters: {
@@ -57061,8 +57089,8 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "tbody",
-                  _vm._l(_vm.roles, function(role, index) {
-                    return _c("tr", { key: index }, [
+                  _vm._l(_vm.roles, function(role) {
+                    return _c("tr", { key: role.id }, [
                       _c("td", [_vm._v(_vm._s(role.id))]),
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(role.name))]),
@@ -57075,7 +57103,24 @@ var render = function() {
                       _vm._v(" "),
                       _vm._m(1, true),
                       _vm._v(" "),
-                      _vm._m(2, true)
+                      _c(
+                        "td",
+                        { staticStyle: { "vertical-align": "middle" } },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-link text-danger",
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteRole(role.id)
+                                }
+                              }
+                            },
+                            [_vm._v("Delete")]
+                          )
+                        ]
+                      )
                     ])
                   }),
                   0
@@ -57086,7 +57131,94 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm._m(3)
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: { id: "modal-create-role", tabindex: "-1", role: "dialog" }
+      },
+      [
+        _c("div", { staticClass: "modal-dialog" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c("form", { attrs: { role: "form" } }, [
+                _c("div", { staticClass: "form-group row" }, [
+                  _c("label", { staticClass: "col-md-3 col-form-label" }, [
+                    _vm._v("Role")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-md-9" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.roleName,
+                          expression: "roleName"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "create-role-name",
+                        type: "text",
+                        placeholder: "Role Name"
+                      },
+                      domProps: { value: _vm.roleName },
+                      on: {
+                        keyup: function($event) {
+                          if (
+                            !$event.type.indexOf("key") &&
+                            _vm._k(
+                              $event.keyCode,
+                              "enter",
+                              13,
+                              $event.key,
+                              "Enter"
+                            )
+                          ) {
+                            return null
+                          }
+                          return _vm.submitCreate($event)
+                        },
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.roleName = $event.target.value
+                        }
+                      }
+                    })
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-secondary",
+                  attrs: { type: "button", "data-dismiss": "modal" }
+                },
+                [_vm._v("Close")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  attrs: { type: "button" },
+                  on: { click: _vm.submitCreate }
+                },
+                [_vm._v("Create")]
+              )
+            ])
+          ])
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -57120,76 +57252,22 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("td", { staticStyle: { "vertical-align": "middle" } }, [
-      _c("button", { staticClass: "btn btn-link text-danger" }, [
-        _vm._v("Delete")
-      ])
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Create Role")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "modal fade",
-        attrs: { id: "modal-create-role", tabindex: "-1", role: "dialog" }
-      },
-      [
-        _c(
-          "div",
-          { staticClass: "modal-dialog", attrs: { role: "document" } },
-          [
-            _c("div", { staticClass: "modal-content" }, [
-              _c("div", { staticClass: "modal-header" }, [
-                _c("h5", { staticClass: "modal-title" }, [
-                  _vm._v("Create Role")
-                ]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "close",
-                    attrs: {
-                      type: "button",
-                      "data-dismiss": "modal",
-                      "aria-label": "Close"
-                    }
-                  },
-                  [
-                    _c("span", { attrs: { "aria-hidden": "true" } }, [
-                      _vm._v("×")
-                    ])
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }, [
-                _c("p", [_vm._v("Modal body text goes here.")])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-footer" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-secondary",
-                    attrs: { type: "button", "data-dismiss": "modal" }
-                  },
-                  [_vm._v("Close")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  { staticClass: "btn btn-primary", attrs: { type: "button" } },
-                  [_vm._v("Create")]
-                )
-              ])
-            ])
-          ]
-        )
-      ]
-    )
   }
 ]
 render._withStripped = true
@@ -74886,6 +74964,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../config */ "./resources/js/config.js");
 
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -74893,36 +74979,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   state: {
-    roles: [],
-    isLoading: false,
-    isLoaded: false
+    roles: []
   },
   getters: {
     roles: function roles(state) {
       return state.roles;
-    },
-    isLoading: function isLoading(state) {
-      return state.isLoading;
-    },
-    isLoaded: function isLoaded(state) {
-      return state.isLoaded;
     }
   },
   mutations: {
     setRoles: function setRoles(state, payload) {
       state.roles = payload;
-    },
-    loading: function loading(state) {
-      state.isLoading = true;
-      state.isLoaded = false;
-    },
-    loadSuccess: function loadSuccess(state) {
-      state.isLoading = false;
-      state.isLoaded = true;
-    },
-    loadError: function loadError(state) {
-      state.isLoading = false;
-      state.isLoaded = false;
     }
   },
   actions: {
@@ -74936,28 +75002,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 commit = _ref.commit;
-                _context.prev = 1;
-                _context.next = 4;
+                _context.next = 3;
                 return _config__WEBPACK_IMPORTED_MODULE_1__["ssoHttp"].get('roles');
 
-              case 4:
+              case 3:
                 request = _context.sent;
                 commit('setRoles', request.data);
-                commit('loadSuccess');
-                _context.next = 12;
-                break;
 
-              case 9:
-                _context.prev = 9;
-                _context.t0 = _context["catch"](1);
-                commit('loadError');
-
-              case 12:
+              case 5:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[1, 9]]);
+        }, _callee);
       }));
 
       function requestRoles(_x) {
@@ -74965,6 +75022,70 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return requestRoles;
+    }(),
+    createRole: function () {
+      var _createRole = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(_ref2, payload) {
+        var getters, commit, formData, request;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                getters = _ref2.getters, commit = _ref2.commit;
+                formData = new FormData();
+                formData.append('name', payload);
+                formData.append('guard_name', 'api');
+                _context2.next = 6;
+                return _config__WEBPACK_IMPORTED_MODULE_1__["ssoHttp"].post('roles', formData);
+
+              case 6:
+                request = _context2.sent;
+                commit('setRoles', [].concat(_toConsumableArray(getters.roles), [request.data]));
+
+              case 8:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+
+      function createRole(_x2, _x3) {
+        return _createRole.apply(this, arguments);
+      }
+
+      return createRole;
+    }(),
+    deleteRole: function () {
+      var _deleteRole = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(_ref3, payload) {
+        var getters, commit;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                getters = _ref3.getters, commit = _ref3.commit;
+                commit('setRoles', getters.roles.filter(function (role) {
+                  return role.id !== payload;
+                }));
+                _context3.next = 4;
+                return _config__WEBPACK_IMPORTED_MODULE_1__["ssoHttp"]["delete"]("roles/".concat(payload));
+
+              case 4:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }));
+
+      function deleteRole(_x4, _x5) {
+        return _deleteRole.apply(this, arguments);
+      }
+
+      return deleteRole;
     }()
   }
 });

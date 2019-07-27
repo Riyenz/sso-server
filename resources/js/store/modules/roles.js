@@ -3,40 +3,33 @@ import { ssoHttp } from '../../config';
 export default {
   state: {
     roles: [],
-    isLoading: false,
-    isLoaded: false,
   },
   getters: {
     roles: state => state.roles,
-    isLoading: state => state.isLoading,
-    isLoaded: state => state.isLoaded,
   },
   mutations: {
     setRoles(state, payload) {
       state.roles = payload;
     },
-    loading(state) {
-      state.isLoading = true;
-      state.isLoaded = false;
-    },
-    loadSuccess(state) {
-      state.isLoading = false;
-      state.isLoaded = true;
-    },
-    loadError(state) {
-      state.isLoading = false;
-      state.isLoaded = false;
-    }
   },
   actions: {
     async requestRoles({ commit }) {
-      try {
-        const request = await ssoHttp.get('roles');
-        commit('setRoles', request.data);
-        commit('loadSuccess');
-      } catch (error) {
-        commit('loadError');
-      }
-    }
+      const request = await ssoHttp.get('roles');
+
+      commit('setRoles', request.data);
+    },
+    async createRole({ getters, commit }, payload) {
+      const formData = new FormData();
+      formData.append('name', payload);
+      formData.append('guard_name', 'api');
+      const request = await ssoHttp.post('roles', formData);
+
+      commit('setRoles', [...getters.roles, request.data]);
+    },
+    async deleteRole({ getters, commit }, payload) {
+      commit('setRoles', getters.roles.filter(role => role.id !== payload));
+
+      await ssoHttp.delete(`roles/${payload}`);
+    },
   }
 }
