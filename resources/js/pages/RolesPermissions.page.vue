@@ -6,8 +6,8 @@
 </template>
 
 <script>
-  import Roles from './../components/Roles.component';
-  import Permissions from './../components/Permissions.component';
+  import Roles from './../components/roles-permissions/Roles.component';
+  import Permissions from './../components/roles-permissions/Permissions.component';
   
   export default {
     components: {

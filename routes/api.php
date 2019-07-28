@@ -23,6 +23,8 @@ Route::group(['prefix' => 'roles',  'middleware' => 'auth:api'], function() {
     Route::get('/{id}', 'RolesController@getById');
     Route::patch('/{id}', 'RolesController@update');
     Route::delete('/{id}', 'RolesController@delete');
+
+    Route::get('/{id}/permissions', 'RolesController@permissions');
 });
 
 Route::group(['prefix' => 'permissions',  'middleware' => 'auth:api'], function() {
