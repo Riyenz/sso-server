@@ -1,10 +1,10 @@
 <template>
-  <div class="roles">
-    <div v-if="roles.length > 0">
+  <div class="permissions">
+    <div v-if="permissions.length > 0">
       <div class="card card-default">
         <div class="card-header d-flex">
-          <h5 class="mb-0 flex-grow-1">Roles</h5>
-          <button class="btn btn-link" tabindex="-1" @click="showCreateModal">Create New Role</button>
+          <h5 class="mb-0 flex-grow-1">Permissions</h5>
+          <button class="btn btn-link" tabindex="-1" @click="showCreateModal">Create New Permission</button>
         </div>
 
         <div class="card-body">
@@ -18,15 +18,15 @@
             </thead>
 
             <tbody>
-              <tr v-for="role in roles" :key="role.id">
-                <td>{{ role.id }}</td>
-                <td>{{ role.name }}</td>
-                <td>{{ role.created_at | date }}</td>
+              <tr v-for="permission in permissions" :key="permission.id">
+                <td>{{ permission.id }}</td>
+                <td>{{ permission.name }}</td>
+                <td>{{ permission.created_at | date }}</td>
                 <td>
-                  <button class="btn btn-link text-primary" @click="showEditModal(role)">Edit</button>
+                  <button class="btn btn-link text-primary" @click="showEditModal(permission)">Edit</button>
                 </td>
                 <td>
-                  <button class="btn btn-link text-danger" @click="deleteRole(role.id)">Delete</button>
+                  <button class="btn btn-link text-danger" @click="deletePermission(permission.id)">Delete</button>
                 </td>
               </tr>
             </tbody>
@@ -35,27 +35,27 @@
       </div>
     </div>
 
-    <div class="modal fade" id="modal-create-role" tabindex="-1" role="dialog">
+    <div class="modal fade" id="modal-create-permission" tabindex="-1" permission="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Create Role</h5>
+            <h5 class="modal-title">Create Permission</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <form role="form" >
+            <form permission="form" >
               <div class="form-group row">
-                <label class="col-md-3 col-form-label">Role</label>
+                <label class="col-md-3 col-form-label">Permission</label>
                 <div class="col-md-9">
                   <input
-                    id="create-role-name"
+                    id="create-permission-name"
                     type="text"
                     class="form-control"
-                    placeholder="Role Name"
+                    placeholder="Permission Name"
                     @keyup.enter="submitCreate"
-                    v-model="roleName"
+                    v-model="permissionName"
                   />
                 </div>
               </div>
@@ -69,27 +69,27 @@
       </div>
     </div>
 
-    <div class="modal fade" id="modal-edit-role" tabindex="-1" role="dialog">
+    <div class="modal fade" id="modal-edit-permission" tabindex="-1" permission="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Edit Role</h5>
+            <h5 class="modal-title">Edit Permission</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <form role="form" >
+            <form permission="form" >
               <div class="form-group row">
-                <label class="col-md-3 col-form-label">Role</label>
+                <label class="col-md-3 col-form-label">Permission</label>
                 <div class="col-md-9">
                   <input
-                    id="edit-role-name"
+                    id="edit-permission-name"
                     type="text"
                     class="form-control"
-                    placeholder="Role Name"
+                    placeholder="Permission Name"
                     @keyup.enter="submitEdit"
-                    v-model="selectedRole.name"
+                    v-model="selectedPermission.name"
                   />
                 </div>
               </div>
@@ -115,47 +115,47 @@
     },
     data() {
       return {
-        roleName: '',
-        selectedRole: {},
+        permissionName: '',
+        selectedPermission: {},
       };
     },
     computed: {
       ...mapGetters([
-        'roles',
+        'permissions',
         'isLoading',
         'isLoaded',
       ])
     },
     methods: {
       ...mapActions([
-        'requestRoles',
-        'createRole',
-        'deleteRole',
-        'editRole',
+        'requestPermissions',
+        'createPermission',
+        'deletePermission',
+        'editPermission',
       ]),
       showCreateModal() {
-        $("#modal-create-role").modal("show");
+        $("#modal-create-permission").modal("show");
       },
       submitCreate() {
-        $("#modal-create-role").modal("hide");
-        this.createRole(this.roleName);
-        this.roleName = '';
+        $("#modal-create-permission").modal("hide");
+        this.createPermission(this.permissionName);
+        this.permissionName = '';
       },
-      showEditModal(role) {
-        this.selectedRole = role;
-        $("#modal-edit-role").modal("show");
+      showEditModal(permission) {
+        this.selectedPermission = permission;
+        $("#modal-edit-permission").modal("show");
       },
       submitEdit() {
-        $("#modal-edit-role").modal("hide");
-        this.editRole(this.selectedRole);
+        $("#modal-edit-permission").modal("hide");
+        this.editPermission(this.selectedPermission);
       },
       prepareComponent() {
-        if (this.roles.length < 1) {
-          this.requestRoles();
+        if(this.permissions.length < 1) {
+          this.requestPermissions();
         }
- 
-        $("#modal-create-role").on("shown.bs.modal", () => {
-          $("#create-role-name").focus();
+
+        $("#modal-create-permission").on("shown.bs.modal", () => {
+          $("#create-permission-name").focus();
         });
       }
     },
