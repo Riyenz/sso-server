@@ -19,6 +19,15 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::group(['prefix' => 'users',  'middleware' => 'auth:web'], function() {
+    Route::get('', 'UsersController@getAll');
+    Route::post('', 'UsersController@create');
+    Route::get('/{id}', 'UsersController@getById');
+    Route::patch('/{id}', 'UsersController@update');
+    Route::delete('/{id}', 'UsersController@delete');
+});
+
+
 Route::group(['prefix' => 'roles',  'middleware' => 'auth:web'], function() {
     Route::get('', 'RolesController@getAll');
     Route::post('', 'RolesController@create');
